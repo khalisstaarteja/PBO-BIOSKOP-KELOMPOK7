@@ -1,0 +1,174 @@
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Scanner;
+import java.util.ArrayList;
+
+public class JadwalFilm {
+    private static Scanner scanner = new Scanner(System.in);
+    // private atribut
+    private Integer kodeJadwal;
+    private Studio studio;
+    private Film film;
+    private LocalDate tanggal;
+    private LocalTime jam;
+    private Integer kapasitas;
+
+    // Constructor 1
+    public JadwalFilm(Integer kodeJadwal, Studio studio, Film film, LocalDate tanggal, LocalTime jam, Integer kapasitas) {
+        this.kodeJadwal = kodeJadwal;
+        this.studio = studio;
+        this.film = film;
+        this.tanggal = tanggal;
+        this.jam = jam;
+        this.kapasitas = kapasitas;
+    }
+
+    // Constructor 2: user input
+    public JadwalFilm(ArrayList<Bioskop> listBioskop, ArrayList<Studio> listStudio, ArrayList<Film> listFilm) {
+        System.out.print("Masukkan Kode Jadwal: ");
+        this.kodeJadwal = scanner.nextInt();
+        scanner.nextLine();
+
+        // Menampilkan daftar bioskop
+        System.out.println("\nDaftar Bioskop: ");
+        for (Bioskop b : listBioskop) {
+            System.out.println(b.getKodeBioskop() + ". " + b.getNamaBioskop() + " | " + b.getLokasi());
+        }
+        // Input bioskop
+        Bioskop bioskopTerpilih = null;
+        int inputKodeBioskop;
+        do{
+            System.out.print("Pilih Kode Bioskop: ");
+            inputKodeBioskop = scanner.nextInt();
+            
+            // Memastikan input user benar
+            for (Bioskop b : listBioskop) {
+                if (b.getKodeBioskop() == inputKodeBioskop) {
+                    bioskopTerpilih = b;
+                    break;
+                }
+            }
+            // Jika input kode tidak ada di data maka input tidak valid
+            if (bioskopTerpilih == null) {
+                System.out.println("Kode bioskop tidak ditemukan!");
+                continue;
+            }
+        } while (bioskopTerpilih == null);
+
+        // Menampilkan daftar studio yang ada di bioskop tersebut
+        System.out.println("\nDaftar Studio:");
+        for (Studio s : listStudio) {
+            // filter hanya studio yang di bioskop yang dipilih
+            if(s.getBioskop() == bioskopTerpilih){
+                System.out.println(s.getKodeStudio() + ". " + s.getNomorStudio() + " | " + s.getJenisStudio());
+            }  
+        }
+        // Input studio
+        Studio studioTerpilih = null;
+        do{
+            System.out.print("Masukkan Kode Studio: ");
+            int inputKodeStudio = scanner.nextInt();
+
+             // Memastikan input user benar
+            for (Studio s : listStudio) {
+                // Admin akan input kode studio, namun kode tersebut harus sesuai dengan bioskop yang dipilih
+                if (s.getKodeStudio() == inputKodeStudio && s.getBioskop() == bioskopTerpilih) {
+                    studioTerpilih = s;
+                }
+            }
+            // Jika input kode tidak ada di data maka input tidak valid
+            if(studioTerpilih == null) {
+                System.out.println("Kode studio tidak ditemukan!");
+                continue;
+            }
+        } while(studioTerpilih == null);
+        this.studio = studioTerpilih;
+        
+        // Tampilin list film
+        System.out.println("\nDaftar Film Tersedia: ");
+        for (Film f : listFilm) {
+            System.out.println(f.getKodeFilm() + ". " + f.getJudul() + " | " + f.getGenre() + " | " + f.getDurasi());
+        }
+        // Input film
+        Film filmTerpilih = null;
+        int inputKodeFilm;
+        do{
+            System.out.print("Pilih Kode Film: ");
+            inputKodeFilm = scanner.nextInt();
+            
+            // Memastikan input user benar
+            for (Film f : listFilm) {
+                if (f.getKodeFilm() == inputKodeFilm) {
+                    filmTerpilih = f;
+                    break;
+                }
+            }
+            // Jika input kode tidak ada di data maka input tidak valid
+            if (filmTerpilih == null) {
+                System.out.println("Kode film tidak ditemukan!");
+                continue;
+            }
+        } while (filmTerpilih == null);
+        // input film
+        this.film = filmTerpilih;
+        
+
+        System.out.print("Masukkan Tanggal (yyyy-mm-dd): ");
+        String strTanggal = scanner.nextLine();
+        this.tanggal = LocalDate.parse(strTanggal);
+
+        System.out.print("Jam (hh:mm) = ");
+        String strJam = scanner.nextLine();
+        this.jam = LocalTime.parse(strJam);
+
+        System.out.print("Kapasitas = ");
+        this.kapasitas = scanner.nextInt();
+        scanner.nextLine();
+    }
+
+    // setters and getters
+    public Integer getKodeJadwal() {
+        return kodeJadwal;
+    }
+
+    public void setKodeJadwal(Integer kodeJadwal) {
+        this.kodeJadwal = kodeJadwal;
+    }
+    public void setStudio(Studio studio) {
+        this.studio = studio;
+    }
+    public void setFilm(Film film) {
+        this.film = film;
+    }
+
+    public Film getFilm() {
+        return film;
+    }
+
+    public Studio getStudio() {
+        return studio;
+    }
+    public LocalDate getTanggal() {
+        return tanggal;
+    }
+
+    public void setTanggal(LocalDate tanggal) {
+        this.tanggal = tanggal;
+    }
+
+    public LocalTime getJam() {
+        return jam;
+    }
+
+    public void setJam(LocalTime jam) {
+        this.jam = jam;
+    }
+
+    public Integer getKapasitas() {
+        return kapasitas;
+    }
+
+    public void setKapasitas(Integer kapasitas) {
+        this.kapasitas = kapasitas;
+    }
+}
