@@ -18,11 +18,25 @@ public class Bioskop {
     }
 
     // Constructor user
-    public Bioskop() {
-        System.out.print("Masukkan Kode Bioskop: ");
-        this.kodeBioskop = scanner.nextInt();
-        scanner.nextLine(); // clear buffer newline
+    public Bioskop(ArrayList<Bioskop> listBioskop) {
+        boolean kodeSudahAda;
+        do {
+            System.out.print("Masukkan Kode Bioskop: ");
+            this.kodeBioskop = scanner.nextInt();
+            scanner.nextLine(); // clear buffer newline
 
+            kodeSudahAda = false;
+            for (Bioskop b : listBioskop) {
+                if (this.kodeBioskop == b.getKodeBioskop()) {
+                    kodeSudahAda = true;
+                    break;
+                }
+            }
+            if (kodeSudahAda) {
+                 System.out.println("Kode bioskop sudah dipakai! Coba kode lain");
+            }
+        } while (kodeSudahAda);
+       
         System.out.print("Masukkan Nama Bioskop: ");
         this.namaBioskop = scanner.nextLine();
 
@@ -36,6 +50,22 @@ public class Bioskop {
     // ArrayList studio yang masih kosong tadi, kita masukkin object Studio
     public void addStudio(Studio studio) {
         this.listStudio.add(studio);
+    }
+
+    void showBioskop() {
+        System.out.println("Kode Bioskop : " + kodeBioskop);
+        System.out.println("Nama Bioskop : " + namaBioskop);
+        System.out.println("Lokasi       : " + lokasi);
+    }
+
+    void detailBioskop() {        
+        System.out.println("=== Detail Bioskop ===");
+        System.out.println(kodeBioskop + ". " + namaBioskop);
+        System.out.println("List Studio:");
+        // Jika bioskop yang dipilih belum ada studio
+        for (Studio s : listStudio) {
+            s.showStudio();
+        }
     }
 
     // Setter

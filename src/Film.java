@@ -22,10 +22,25 @@ public class Film {
     }
 
     // Constructor 2: user input
-    public Film() {
-        System.out.print("Masukkan Kode Film: ");
-        this.kodeFilm = scanner.nextInt();
-        scanner.nextLine();
+    public Film(ArrayList<Film> listFilm) {
+        boolean kodeSudahAda;
+        do {
+            System.out.print("Masukkan Kode Film: ");
+            this.kodeFilm = scanner.nextInt();
+            scanner.nextLine(); // clear buffer newline
+
+            kodeSudahAda = false;
+            for (Film f : listFilm) {
+                // jika kode yang dimasukkan ada yang sama dengan data
+                if (this.kodeFilm == f.getKodeFilm()) {
+                    kodeSudahAda = true;
+                    break;
+                }
+            }
+            if (kodeSudahAda) {
+                 System.out.println("Kode film sudah dipakai! Coba kode lain");
+            }
+        } while (kodeSudahAda);
 
         System.out.print("Masukkan Judul: ");
         this.judul = scanner.nextLine();
@@ -42,6 +57,13 @@ public class Film {
      // ArrayList jadwal yang masih kosong tadi, kita masukkin object Jadwal
      public void addJadwal(JadwalFilm jadwal) {
         this.listJadwal.add(jadwal);
+    }
+
+    void showFilm() {
+        System.out.println("Kode Film : " + kodeFilm);
+        System.out.println("Judul     : " + judul);
+        System.out.println("Genre     : " + genre);
+        System.out.println("Durasi    : " + durasi);
     }
 
     // setters and getters

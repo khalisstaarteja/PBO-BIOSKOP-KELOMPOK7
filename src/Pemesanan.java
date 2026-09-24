@@ -60,11 +60,17 @@ public class Pemesanan implements Tiket{
         // Tampilin list film
         System.out.println("\nDaftar Film Tersedia: ");
         // Akses data film lewat JadwalFilm karna Film tidak memiliki atribut studio
+        ArrayList<Film> sudahTampil = new ArrayList<>(); // sudahTampil untuk mencatat film yang sudah tampil
         for (JadwalFilm j : listJadwal) {
-            if(j.getStudio().getBioskop() == bioskopTerpilih){
-                Film f = j.getFilm();
+            Film f = j.getFilm();
+            if(j.getStudio().getBioskop() == bioskopTerpilih && !sudahTampil.contains(f)){
+                sudahTampil.add(f);
                 System.out.println(f.getKodeFilm() + ". " + f.getJudul() + " | " + f.getGenre() + " | " + f.getDurasi());
             } 
+        }
+        if (sudahTampil.isEmpty()) {
+            System.out.println("Belum ada film di bioskop ini!");
+            return;
         }
         // Memastikan kode film yang diinput sesuai
         Film filmTerpilih = null;
@@ -153,7 +159,6 @@ public class Pemesanan implements Tiket{
                     break;
                 default:
                     System.out.println("Pilihan tidak valid!");
-                    break;
             } 
             if (pilihan < 1 || pilihan > 3) {
                 continue;

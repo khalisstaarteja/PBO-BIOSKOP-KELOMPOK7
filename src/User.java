@@ -10,17 +10,13 @@ public abstract class User {
     private String password;
 
     // Constructor 1: public
-    public User(String kodeUser, String nama, String password) {
-        this.kodeUser = kodeUser;
+    public User(String nama, String password) {
         this.nama = nama;
         this.password = password;
     }
 
     // Constructor 2: user input
     public User() {
-        System.out.print("Kode User = ");
-        this.kodeUser = scanner.nextLine();
-
         System.out.print("Nama = ");
         this.nama = scanner.nextLine();
 

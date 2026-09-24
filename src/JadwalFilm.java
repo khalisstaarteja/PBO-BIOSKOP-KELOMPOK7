@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -24,10 +25,25 @@ public class JadwalFilm {
     }
 
     // Constructor 2: user input
-    public JadwalFilm(ArrayList<Bioskop> listBioskop, ArrayList<Studio> listStudio, ArrayList<Film> listFilm) {
-        System.out.print("Masukkan Kode Jadwal: ");
-        this.kodeJadwal = scanner.nextInt();
-        scanner.nextLine();
+    public JadwalFilm(ArrayList<JadwalFilm> listJadwal, ArrayList<Bioskop> listBioskop, ArrayList<Studio> listStudio, ArrayList<Film> listFilm) {
+        boolean kodeSudahAda;
+        do {
+            System.out.print("Masukkan Kode Jadwal: ");
+            this.kodeJadwal = scanner.nextInt();
+            scanner.nextLine(); // clear buffer newline
+
+            kodeSudahAda = false;
+            for (JadwalFilm j : listJadwal) {
+                // jika kode yang dimasukkan ada yang sama dengan data
+                if (this.kodeJadwal == j.getKodeJadwal()) {
+                    kodeSudahAda = true;
+                    break;
+                }
+            }
+            if (kodeSudahAda) {
+                 System.out.println("Kode jadwal sudah dipakai! Coba kode lain");
+            }
+        } while (kodeSudahAda);
 
         // Menampilkan daftar bioskop
         System.out.println("\nDaftar Bioskop: ");
@@ -57,12 +73,19 @@ public class JadwalFilm {
 
         // Menampilkan daftar studio yang ada di bioskop tersebut
         System.out.println("\nDaftar Studio:");
+        boolean adaStudio = false;
         for (Studio s : listStudio) {
             // filter hanya studio yang di bioskop yang dipilih
             if(s.getBioskop() == bioskopTerpilih){
+                adaStudio = true;
                 System.out.println(s.getKodeStudio() + ". " + s.getNomorStudio() + " | " + s.getJenisStudio());
             }  
         }
+        if (!adaStudio) {
+            System.out.println("Bioskop ini belum punya studio!");
+            return;
+        }
+
         // Input studio
         Studio studioTerpilih = null;
         do{
@@ -109,21 +132,46 @@ public class JadwalFilm {
                 continue;
             }
         } while (filmTerpilih == null);
+        scanner.nextLine(); 
         // input film
         this.film = filmTerpilih;
         
+        // Jika user salah format tanggal, atau jam maka LocalDate.parse akan melempar error
+        LocalDate tgl = null;
+        while (tgl == null) {
+            System.out.print("Masukkan Tanggal (yyyy-mm-dd): ");
+            try {
+                tgl = LocalDate.parse(scanner.nextLine());
+            } catch (DateTimeParseException e) {
+                System.out.println("Format tanggal salah!");
+            }
+        }
+        this.tanggal = tgl;
 
-        System.out.print("Masukkan Tanggal (yyyy-mm-dd): ");
-        String strTanggal = scanner.nextLine();
-        this.tanggal = LocalDate.parse(strTanggal);
-
-        System.out.print("Jam (hh:mm) = ");
-        String strJam = scanner.nextLine();
-        this.jam = LocalTime.parse(strJam);
+        LocalTime waktu = null;
+        while (waktu == null) {
+            System.out.print("Jam (hh:mm) = ");
+            try {
+                waktu = LocalTime.parse(scanner.nextLine());
+            } catch (DateTimeParseException e) {
+                System.out.println("Format jam salah! Contoh: 14:30");
+            }
+        }
+        this.jam = waktu;
 
         System.out.print("Kapasitas = ");
         this.kapasitas = scanner.nextInt();
         scanner.nextLine();
+    }
+
+    void showJadwal() {
+        System.out.println("Kode Jadwal : " + kodeJadwal);
+        System.out.println("Bioskop     : " + studio.getBioskop().getNamaBioskop());
+        System.out.println("Studio      : " + studio.getNomorStudio() + " (" + studio.getJenisStudio() + ")");
+        System.out.println("Film        : " + film.getJudul());
+        System.out.println("Tanggal     : " + tanggal);
+        System.out.println("Jam         : " + jam);
+        System.out.println("Kapasitas   : " + kapasitas);
     }
 
     // setters and getters

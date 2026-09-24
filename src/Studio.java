@@ -21,15 +21,27 @@ public class Studio {
     }
 
     // Constructor user
-    public Studio(ArrayList<Bioskop> listBioskop) {
-        if (listBioskop.isEmpty()) {
-            System.out.println("Belum ada bioskop yang terdaftar! Silahkan daftarkan terlebih dahulu.");
-            return;
-        }
+    public Studio(ArrayList<Studio> listStudio, ArrayList<Bioskop> listBioskop) {
         System.out.println("=== FORM INPUT STUDIO ===");
 
-        System.out.print("Masukkan Kode Studio  : ");
-        this.kodeStudio = scanner.nextInt();
+        boolean kodeSudahAda;
+        do {
+            System.out.print("Masukkan Kode Studio: ");
+            this.kodeStudio= scanner.nextInt();
+            scanner.nextLine(); // clear buffer newline
+            
+            kodeSudahAda = false;
+            for (Studio s : listStudio) {
+                // jika kode yang dimasukkan ada yang sama dengan data
+                if (this.kodeStudio == s.getKodeStudio()) {
+                    kodeSudahAda = true;
+                    break;
+                }
+            }
+            if (kodeSudahAda) {
+                 System.out.println("Kode studio sudah dipakai! Coba kode lain");
+            }
+        } while (kodeSudahAda);
 
         System.out.print("Masukkan Nomor Studio : ");
         this.nomorStudio = scanner.nextInt();
@@ -46,12 +58,15 @@ public class Studio {
             switch(pilihan) {
                 case 1 :
                     this.jenisStudio = "Regular";
+                    this.harga = 50000;
                     break;
                 case 2 :
                     this.jenisStudio = "IMAX";
+                    this.harga = 70000;
                     break;
                 case 3 :
                     this.jenisStudio = "Premiere";
+                    this.harga = 90000;
                     break;
                 default :
                     System.out.println("Pilihan tidak valid!");
@@ -80,10 +95,16 @@ public class Studio {
             }
         } while (bioskopTerpilih == null);
         
-        this.bioskop = bioskopTerpilih;
+        this.bioskop = bioskopTerpilih;  
+    }
 
-        System.out.print("Masukkan Harga: ");
-        this.harga = scanner.nextFloat();       
+    void showStudio() {
+        System.out.println("=== Data Studio ===");
+        System.out.println("Kode Studio  : " + kodeStudio);
+        System.out.println("Nomor Studio : " + nomorStudio);
+        System.out.println("Jenis Studio : " + jenisStudio);
+        System.out.println("Bioskop: " + bioskop.getNamaBioskop());
+        System.out.println("Harga        : Rp" + String.format("%.0f", harga));
     }
 
     // Setter
